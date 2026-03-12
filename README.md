@@ -84,13 +84,11 @@ TMDb:
 }
 ```
 
-
 # Docker infrastruktúra
 A projekt tartalmaz egy docker-compose.yml fájlt, amely elindítja:
 
 - MySQL – localhost:3306
 - Redis – localhost:6379
-
 - Indítás - docker compose up -d
 
 # Konfiguráció
