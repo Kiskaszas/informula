@@ -14,9 +14,9 @@ public class MovieController {
 
     @GetMapping("/{title}")
     public MovieResponse getMovies(
-            @PathVariable String title,
-            @RequestParam String api
+            @PathVariable final String title,
+            @RequestParam final String apiKey
     ) {
-        return movieService.getMovies(api, title);
+        return movieService.getMovies(apiKey, title);
     }
 }

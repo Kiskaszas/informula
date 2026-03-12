@@ -1,13 +1,23 @@
 package hu.informula.movieinfo.dto.omdb;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class OmdbSearchItem {
 
-    private String Title;
-    private String Year;
+    @JsonProperty("Title")
+    private String title;
+
+    @JsonProperty("Year")
+    private String year;
+
+    @JsonProperty("imdbID")
     private String imdbID;
-    private String Type;
-    private String Poster;
+
+    @JsonProperty("Type")
+    private String type;
+
+    @JsonProperty("Poster")
+    private String poster;
 }

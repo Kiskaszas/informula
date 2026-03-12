@@ -59,16 +59,16 @@ src/main/java/com/example/movie
 
 ### Végpont
 
-- GET /movies/{title}?api={omdb|tmdb}
+- GET /movies/{title}?apiKey={omdb|tmdb}
 
 ### Példák
 
 OMDb:
 
-- GET http://localhost:8080/movies/Avatar?api=omdb
+- GET http://localhost:8080/movies/Avatar?apiKey=omdb
 
 TMDb:
-- GET http://localhost:8080/movies/Avatar?api=tmdb
+- GET http://localhost:8080/movies/Avatar?apiKey=tmdb
 
 ### Válasz példa
 
@@ -118,6 +118,6 @@ java -jar target/movie-info-service.jar
 
 - A Redis cache kulcsa: 
     ```
-  movies::{api}_{title}
+  movies::{apiKey}_{title}
   A cache TTL alapértelmezés szerint 10 perc.
   ```

@@ -19,16 +19,26 @@ public class MovieService {
     private final TmdbClient tmdbClient;
     private final SearchedElementRepository logRepository;
 
-    @Cacheable(value = "movies", key = "#api + '_' + #title")
-    public MovieResponse getMovies(String api, String title) {
+    @Cacheable(value = "movies", key = "#apiKey + '_' + #title")
+    public MovieResponse getMovies(String apiKey, String title) {
 
-        logRepository.save(new SearchedElement(null, api, title, LocalDateTime.now()));
+        logRepository.save(new SearchedElement(null, apiKey, title, LocalDateTime.now()));
 
-        List<MovieItem> movies = switch (api.toLowerCase()) {
-            case "omdb" -> omdbClient.search(title);
-            case "tmdb" -> tmdbClient.search(title);
-            default -> throw new IllegalArgumentException("Unknown API: " + api);
-        };
+        List<MovieItem> movies;
+
+        if (apiKey.length() == 4) {
+            movies = switch (apiKey.toLowerCase()) {
+                case "omdb" -> omdbClient.search(title);
+                case "tmdb" -> tmdbClient.search(title);
+                default -> throw new IllegalStateException("Unexpected value: " + apiKey.toLowerCase());
+            };
+        } else if (apiKey.length() == 8) {
+            movies = omdbClient.search(title, apiKey);
+        } else if (apiKey.length() == 32) {
+            movies = tmdbClient.search(title, apiKey);
+        } else {
+            throw new IllegalArgumentException("Invalid API key format: " + apiKey);
+        }
 
         return new MovieResponse(movies);
     }

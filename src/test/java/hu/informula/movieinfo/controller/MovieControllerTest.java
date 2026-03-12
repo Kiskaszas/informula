@@ -29,7 +29,7 @@ class MovieControllerTest {
         MovieController controller = new MovieController(movieService);
         MockMvc mvc = MockMvcBuilders.standaloneSetup(controller).build();
 
-        mvc.perform(get("/movies/Avatar?api=omdb")
+        mvc.perform(get("/movies/Avatar?apiKey=omdb")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.movies[0].title").value("Avatar"))

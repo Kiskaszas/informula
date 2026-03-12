@@ -18,9 +18,13 @@ public class TmdbClient {
     @Value("${movie.tmdb.apiKey}")
     private String apiKey;
 
+    public List<MovieItem> search(final String title, final String apiKey) {
+        this.apiKey = apiKey;
+        return search(title);
+    }
+
     public List<MovieItem> search(final String title) {
-        var url = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey +
-                "&query=" + title + "&include_adult=true";
+        var url = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&query=" + title + "&include_adult=true";
 
         var response = webClient.get()
                 .uri(url)
@@ -38,11 +42,9 @@ public class TmdbClient {
     }
 
     private MovieItem getMovieDetails(final TmdbSearchItem item) {
-        var detailUrl = "https://api.themoviedb.org/3/movie/" + item.getId() +
-                "?api_key=" + apiKey;
+        var detailUrl = "https://api.themoviedb.org/3/movie/" + item.getId() + "?api_key=" + apiKey;
 
-        var creditsUrl = "https://api.themoviedb.org/3/movie/" + item.getId() +
-                "/credits?api_key=" + apiKey;
+        var creditsUrl = "https://api.themoviedb.org/3/movie/" + item.getId() + "/credits?api_key=" + apiKey;
 
         var detail = webClient.get()
                 .uri(detailUrl)

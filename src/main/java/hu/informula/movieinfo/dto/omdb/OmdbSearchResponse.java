@@ -1,5 +1,6 @@
 package hu.informula.movieinfo.dto.omdb;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -7,8 +8,16 @@ import java.util.List;
 @Data
 public class OmdbSearchResponse {
 
-    private List<OmdbSearchItem> Search;
+    @JsonProperty("Search")
+    private List<OmdbSearchItem> search;
+
+    @JsonProperty("totalResults")
     private String totalResults;
-    private String Response;
-    private String Error;
+
+    @JsonProperty("Response")
+    private String response;
+
+    @JsonProperty("Error")
+    private String error;
 }
+
