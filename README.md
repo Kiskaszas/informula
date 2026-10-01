@@ -1,22 +1,22 @@
 # Movie Info Service
 
-Egy Spring Boot alapú, gyors és tiszta architektúrájú filmkereső szolgáltatás, amely az **OMDb** és **TMDb** publikus API-kat használja.  
-A rendszer Redis cache-t alkalmaz a gyors válaszidő érdekében, és MySQL adatbázisba menti a keresési mintákat statisztikai célból.
+A Spring Boot–based movie search service with a fast, clean architecture, built on the public **OMDb** and **TMDb** APIs.  
+The system uses a Redis cache for fast response times and stores search patterns in a MySQL database for statistical purposes.
 
 ---
 
-## Fő funkciók
+## Key Features
 
-- Filmkeresés **OMDb** vagy **TMDb** API használatával
-- Gyors válaszidő **Redis cache** segítségével
-- Keresési minták mentése **MySQL** adatbázisba
-- Egységesített válaszformátum (cím, év, rendezők)
-- Tiszta, SOLID alapú architektúra
+- Movie search via the **OMDb** or **TMDb** API
+- Fast response times thanks to **Redis caching**
+- Search patterns persisted to a **MySQL** database
+- Unified response format (title, year, directors)
+- Clean architecture built on SOLID principles
 - **100% unit test coverage** (JUnit 5 + Mockito)
 
 ---
 
-## Technológiák
+## Technologies
 
 - Java 17
 - Spring Boot 3
@@ -31,46 +31,54 @@ A rendszer Redis cache-t alkalmaz a gyors válaszidő érdekében, és MySQL ada
 
 ---
 
-## Architektúra áttekintés
+## Architecture Overview
 
-A projekt tiszta rétegekre van bontva:
+The project is organized into clean layers:
 
+```
 src/main/java/com/example/movie
-├── controller       → REST végpont
-├── service          → üzleti logika + cache + API választás
-├── dto              → egységesített és provider-specifikus DTO-k
-├── entity           → JPA entitások
-├── repository       → MySQL adattárolás
-├── provider         → OMDb és TMDb kliensek
-└── config           → konfigurációk (Redis, WebClient, stb.)
+├── controller       → REST endpoint
+├── service          → business logic + caching + provider selection
+├── dto              → unified and provider-specific DTOs
+├── entity           → JPA entities
+├── repository       → MySQL persistence
+├── provider         → OMDb and TMDb clients
+└── config           → configuration (Redis, WebClient, etc.)
+```
 
+### Applying the SOLID Principles
 
-### SOLID elvek alkalmazása
-
-- **S – Single Responsibility**: minden osztály egyetlen felelősséggel bír
-- **O – Open/Closed**: új provider könnyen hozzáadható
-- **L – Liskov Substitution**: a service csak interfészeket használ
-- **I – Interface Segregation**: kis, fókuszált interfészek
-- **D – Dependency Inversion**: a magas szintű modulok absztrakciókra épülnek
+- **S – Single Responsibility**: each class has a single responsibility
+- **O – Open/Closed**: new providers can be added easily
+- **L – Liskov Substitution**: the service depends only on interfaces
+- **I – Interface Segregation**: small, focused interfaces
+- **D – Dependency Inversion**: high-level modules depend on abstractions
 
 ---
 
 ## REST API
 
-### Végpont
+### Endpoint
 
-- GET /movies/{title}?apiKey={omdb|tmdb}
+```
+GET /movies/{title}?apiKey={omdb|tmdb}
+```
 
-### Példák
+### Examples
 
 OMDb:
 
-- GET http://localhost:8080/movies/Avatar?apiKey=omdb
+```
+GET http://localhost:8080/movies/Avatar?apiKey=omdb
+```
 
 TMDb:
-- GET http://localhost:8080/movies/Avatar?apiKey=tmdb
 
-### Válasz példa
+```
+GET http://localhost:8080/movies/Avatar?apiKey=tmdb
+```
+
+### Sample Response
 
 ```json
 {
@@ -84,40 +92,53 @@ TMDb:
 }
 ```
 
-# Docker infrastruktúra
-A projekt tartalmaz egy docker-compose.yml fájlt, amely elindítja:
+---
 
-- MySQL – localhost:3306
-- Redis – localhost:6379
-- Indítás - docker compose up -d
+## Docker Infrastructure
 
-# Konfiguráció
+The project includes a `docker-compose.yml` file that starts:
 
-A szükséges API kulcsokat az application.yml kezeli:
+- MySQL – `localhost:3306`
+- Redis – `localhost:6379`
 
-``
+Start the containers with:
+
+```
+docker compose up -d
+```
+
+---
+
+## Configuration
+
+The required API keys are managed in `application.yml`:
+
+```yaml
 movie:
-    omdb:
-        apiKey: a8adaed6
-    tmdb:
-        apiKey: 03ba4d41ddaa46bbf9c4a6f64f5685bc
-``
+  omdb:
+    apiKey: a8adaed6
+  tmdb:
+    apiKey: 03ba4d41ddaa46bbf9c4a6f64f5685bc
+```
 
-# Alkalmazás indítása
+---
 
-- mvn spring-boot:run
+## Running the Application
 
-### Vagy build után:
+```
+mvn spring-boot:run
+```
+
+### Or after building:
 
 ```
 mvn clean package
 java -jar target/movie-info-service.jar
 ```
 
-# Cache működése
+---
 
-- A Redis cache kulcsa: 
-    ```
-  movies::{apiKey}_{title}
-  A cache TTL alapértelmezés szerint 10 perc.
-  ```
+## How Caching Works
+
+- Redis cache key format: `movies::{apiKey}_{title}`
+- The cache TTL is 10 minutes by default.
